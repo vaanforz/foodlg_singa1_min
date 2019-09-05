@@ -10,7 +10,8 @@ import admins
 import classes
 import settings
 import users
-import pandas
+import pandas as pd
+import ast
 
 app = Flask(__name__)
 auth = HTTPBasicAuth()
@@ -97,10 +98,18 @@ def model_endpoint():
 
     if int(user['quota']) <= 0:
         return error_response_unauthorized(message='No more request quota.', quota=user['quota'], tier=user['tier'])
+
+    energy = 0
+    fat = 0
+    sodium = 0
+    protein = 0
+    per_serving = 'nil'
+
     try:
         task = get_task_in_lowercase(request)
         request_id = make_request_in_queue(image=image_bytes, queue=task)
         request_done = wait_for_request_done(request_id)
+
         if not task == 'echo':
             newuser = {'quota': int(user['quota']) -1 }
             user = users.update_user(name=user['name'], updates=newuser)
@@ -110,9 +119,37 @@ def model_endpoint():
         return error_response_service_unavailable(message='Request timeout. Please try again.')
     except Exception as e:
         print(e)
-        return error_response_internal_server_error(message='Error during classification.')
+        return error_response_internal_server_error(message=e)
 
-    return success_response_with_json(quota=user['quota'], tier=user['tier'], results=request_done.results)
+    try:
+        results = ast.literal_eval(str(request_done.results))
+        top1 = max(results, key=lambda x: results[x])
+        top1_searchterm = searchterms_mapping[top1]['searchterms']
+        top1_food = nutrition_mapping[nutrition_mapping.name.apply(lambda x: top1_searchterm in str(x).lower())].iloc[0]
+        energy = int(round(float(top1_food['Energy']),0))
+        fat = int(round(float(top1_food['TotalFat']),0))
+        sodium = int(round(float(top1_food['Sodium']),0))
+        protein = int(round(float(top1_food['Protein']),0))
+        per_serving = top1_food['portion']
+    except:
+        pass
+
+    if(energy==0):
+        try:
+            results = ast.literal_eval(str(request_done.results))
+            top1 = max(results, key=lambda x: results[x])
+            top1_searchterm = searchterms_mapping[top1]['searchterms']
+            top1_food = nutrition_mapping[nutrition_mapping.altname.apply(lambda x: top1_searchterm in str(x).lower())].iloc[0]
+            energy = int(round(float(top1_food['Energy']),0))
+            fat = int(round(float(top1_food['TotalFat']),0))
+            sodium = int(round(float(top1_food['Sodium']),0))
+            protein = int(round(float(top1_food['Protein']),0))
+            per_serving = top1_food['portion']
+        except:
+            pass
+
+    return success_response_with_json(quota=user['quota'], tier=user['tier'], results=request_done.results,
+        nutrition={'per_serving': per_serving, 'energy': energy, 'fat': fat, 'sodium': sodium, 'protein': protein})
 
 
 @app.route('/users', methods=['GET'])
@@ -321,4 +358,10 @@ def error_response_with_json(error_code, **kwargs):
 
 
 if __name__ == '__main__':
+    global searchterms_mapping
+    searchterms_mapping = open('food_and_nutrition_mappings/foodrecog-json.txt', 'r').read()
+    searchterms_mapping = ast.literal_eval(searchterms_mapping.replace('\n','').replace('\t',''))
+    
+    global nutrition_mapping
+    nutrition_mapping = pd.read_json('food_and_nutrition_mappings/foodtypes.json')
     app.run(host='0.0.0.0')
