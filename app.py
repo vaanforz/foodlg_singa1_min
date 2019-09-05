@@ -10,6 +10,7 @@ import admins
 import classes
 import settings
 import users
+import pandas
 
 app = Flask(__name__)
 auth = HTTPBasicAuth()
