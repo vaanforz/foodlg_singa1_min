@@ -99,12 +99,6 @@ def model_endpoint():
     if int(user['quota']) <= 0:
         return error_response_unauthorized(message='No more request quota.', quota=user['quota'], tier=user['tier'])
 
-    energy = 0
-    fat = 0
-    sodium = 0
-    protein = 0
-    per_serving = 'nil'
-
     try:
         task = get_task_in_lowercase(request)
         request_id = make_request_in_queue(image=image_bytes, queue=task)
@@ -121,35 +115,41 @@ def model_endpoint():
         print(e)
         return error_response_internal_server_error(message=e)
 
-    try:
-        results = ast.literal_eval(str(request_done.results))
-        top1 = max(results, key=lambda x: results[x])
-        top1_searchterm = searchterms_mapping[top1]['searchterms']
-        top1_food = nutrition_mapping[nutrition_mapping.name.apply(lambda x: top1_searchterm in str(x).lower())].iloc[0]
-        energy = int(round(float(top1_food['Energy']),0))
-        fat = int(round(float(top1_food['TotalFat']),0))
-        sodium = int(round(float(top1_food['Sodium']),0))
-        protein = int(round(float(top1_food['Protein']),0))
-        per_serving = top1_food['portion']
-    except:
-        pass
-
-    if(energy==0):
+    def nutrition_search(food_searchterm):
         try:
-            results = ast.literal_eval(str(request_done.results))
-            top1 = max(results, key=lambda x: results[x])
-            top1_searchterm = searchterms_mapping[top1]['searchterms']
-            top1_food = nutrition_mapping[nutrition_mapping.altname.apply(lambda x: top1_searchterm in str(x).lower())].iloc[0]
-            energy = int(round(float(top1_food['Energy']),0))
-            fat = int(round(float(top1_food['TotalFat']),0))
-            sodium = int(round(float(top1_food['Sodium']),0))
-            protein = int(round(float(top1_food['Protein']),0))
-            per_serving = top1_food['portion']
+            topk_food = nutrition_mapping[nutrition_mapping.name.apply(lambda x: food_searchterm in str(x).lower())].iloc[0]
+            return topk_food
+        except:
+            pass
+        try:
+            topk_food = nutrition_mapping[nutrition_mapping.altname.apply(lambda x: food_searchterm in str(x).lower())].iloc[0]
+            return topk_food
         except:
             pass
 
+    results = ast.literal_eval(str(request_done.results))
+    nutrition = {}
+    for food in results.keys():
+        energy = 'nil'
+        fat = 'nil'
+        sodium = 'nil'
+        protein = 'nil'
+        per_serving = 'nil'
+
+        try:
+            food_searchterm = searchterms_mapping[food]['searchterms']
+            topk_food = nutrition_search(food_searchterm)
+            energy = str(topk_food['Energy'])
+            fat = str(topk_food['TotalFat'])
+            sodium = str(topk_food['Sodium'])
+            protein = str(topk_food['Protein'])
+            per_serving = topk_food['portion']
+        except:
+            pass
+        nutrition[food] = {'per_serving': per_serving, 'energy': energy, 'fat': fat, 'sodium': sodium, 'protein': protein}
+
     return success_response_with_json(quota=user['quota'], tier=user['tier'], results=request_done.results,
-        nutrition={'per_serving': per_serving, 'energy': energy, 'fat': fat, 'sodium': sodium, 'protein': protein})
+        nutrition=nutrition)
 
 
 @app.route('/users', methods=['GET'])
