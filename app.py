@@ -137,8 +137,8 @@ def model_endpoint():
         per_serving = 'nil'
 
         try:
-            food_searchterm = searchterms_mapping[food]['searchterms']
-            topk_food = nutrition_search(food_searchterm)
+            food_searchterm = searchterms_mapping[food.lower()]['searchterms']
+            topk_food = nutrition_search(food_searchterm.lower())
             energy = str(topk_food['Energy'])
             fat = str(topk_food['TotalFat'])
             sodium = str(topk_food['Sodium'])

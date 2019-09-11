@@ -30,7 +30,7 @@
 		"display": "Bagel & croissant",
 		"ids": "",
 		"labname": "bagel & croissant",
-		"searchterms": "bagel & croissant",
+		"searchterms": "bagel, plain",
 		"src": 1,
 		"catids": "",
 		"subcatids": ""
@@ -372,7 +372,7 @@
 		"display": "Chin chow drink",
 		"ids": "",
 		"labname": "chin chow drink",
-		"searchterms": "chin chow drink",
+		"searchterms": "Chin chou",
 		"src": 1,
 		"catids": "",
 		"subcatids": ""
@@ -453,7 +453,7 @@
 		"display": "Don, chicken teriyaki",
 		"ids": "",
 		"labname": "don, chicken teriyaki",
-		"searchterms": "chicken teriyaki don",
+		"searchterms": "Teriyaki chicken don",
 		"src": 1,
 		"catids": "",
 		"subcatids": ""
@@ -732,7 +732,7 @@
 		"display": "Kaya toast",
 		"ids": "",
 		"labname": "kaya toast",
-		"searchterms": "kaya toast",
+		"searchterms": "Kaya bun",
 		"src": 1,
 		"catids": "",
 		"subcatids": ""
@@ -768,7 +768,7 @@
 		"display": "Kopi and teh",
 		"ids": "",
 		"labname": "kopi and teh",
-		"searchterms": "coffee kopi teh",
+		"searchterms": "Teh O,Tea, with sugar",
 		"src": 1,
 		"catids": "",
 		"subcatids": ""
@@ -1020,7 +1020,7 @@
 		"display": "Miso ramen, with fishcake",
 		"ids": "",
 		"labname": "miso ramen, with fishcake",
-		"searchterms": "miso ramen, with fishcake",
+		"searchterms": "miso ramen",
 		"src": 1,
 		"catids": "",
 		"subcatids": ""
@@ -1042,6 +1042,15 @@
 		"src": 1,
 		"catids": "8",
 		"subcatids": "58"
+	},
+	"mixed vege rice": {
+		"display": "Nasi Lemak with chicken wing",
+		"ids": "",
+		"labname": "Nasi Lemak with chicken wing",
+		"searchterms": "Nasi Lemak with chicken wing",
+		"src": 1,
+		"catids": "",
+		"subcatids": ""
 	},
 	"mixed vegetables": {
 		"display": "Mixed vegetables",
@@ -1209,7 +1218,7 @@
 		"display": "Peanut pancake",
 		"ids": "",
 		"labname": "peanut pancake",
-		"searchterms": "peanut pancake",
+		"searchterms": "Peanut mee chang kueh",
 		"src": 1,
 		"catids": "",
 		"subcatids": ""
@@ -1245,7 +1254,7 @@
 		"display": "Pilaf, pea",
 		"ids": "",
 		"labname": "pilaf, pea",
-		"searchterms": "pilaf pea",
+		"searchterms": "Pea pilaf",
 		"src": 1,
 		"catids": "",
 		"subcatids": ""
@@ -1353,7 +1362,7 @@
 		"display": "Rice, chicken katsu with japanese curry",
 		"ids": "",
 		"labname": "rice, chicken katsu with japanese curry",
-		"searchterms": "rice, chicken katsu with japanese curry",
+		"searchterms": "Chicken katsu with japanese curry and rice",
 		"src": 1,
 		"catids": "",
 		"subcatids": ""
@@ -1488,7 +1497,7 @@
 		"display": "Seafood noodles soup",
 		"ids": "",
 		"labname": "seafood noodles soup",
-		"searchterms": "seafood noodles soup",
+		"searchterms": "Seafood bee hoon soup",
 		"src": 1,
 		"catids": "",
 		"subcatids": ""
@@ -1551,7 +1560,7 @@
 		"display": "Soft boiled eggs",
 		"ids": "",
 		"labname": "soft boiled eggs",
-		"searchterms": "soft boiled egg",
+		"searchterms": "tea leaf egg",
 		"src": 1,
 		"catids": "",
 		"subcatids": ""
@@ -1623,7 +1632,7 @@
 		"display": "Tacos and nachos",
 		"ids": "",
 		"labname": "tacos and nachos",
-		"searchterms": "taco nacho",
+		"searchterms": "tortilla chip, nacho flavour",
 		"src": 1,
 		"catids": "",
 		"subcatids": ""
@@ -1803,7 +1812,7 @@
 		"display": "Yogurt",
 		"ids": "",
 		"labname": "yogurt",
-		"searchterms": "yogurt",
+		"searchterms": "Flavoured low fat yoghurt",
 		"src": 1,
 		"catids": "",
 		"subcatids": ""
